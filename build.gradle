@@ -24,6 +24,10 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.22.2'
 }
 
+tasks.named('run') {
+    standardInput = System.in;
+}
+
 test {
     useJUnitPlatform()
 }
