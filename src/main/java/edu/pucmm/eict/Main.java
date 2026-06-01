@@ -2,6 +2,9 @@ package edu.pucmm.eict;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Scanner;
 
 public class Main {
@@ -18,6 +21,18 @@ public class Main {
             url = scanner.nextLine().trim();
 
         }while(!esURLvalida(url));
+
+        try {
+            HttpClient client = HttpClient.newBuilder().build();
+
+            HttpRequest request = HttpRequest.newBuilder().uri(new URI(url)).GET().build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
 
     }
