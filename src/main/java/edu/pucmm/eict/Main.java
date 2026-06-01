@@ -51,6 +51,8 @@ public class Main {
             IO.println("4. Cantidad de formularios: ");
             IO.println("GET: "+ cantidadFormulariosGET(document));
             IO.println("POST "+ cantidadFormulariosPOST(document));
+            IO.println("\n5. Inputs para cada formulario: ");
+            mostrarInputs(document);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -124,4 +126,31 @@ public class Main {
         return post;
     }
 
+    public static void mostrarInputs(Document doc)
+    {
+        Elements formularios = doc.select("form");
+
+        int cant = 1;
+
+        for (Element form : formularios)
+        {
+            IO.println("\nFormulario (" +cant+ ")");
+
+            Elements inputs = form.select("input");
+
+            for (Element input : inputs)
+            {
+                String nombre = input.attr("name");
+                String tipo = input.attr("type");
+
+                if (tipo.isEmpty()) {
+                    tipo = "text";
+                }
+                IO.println("Input: "+nombre);
+                IO.println("Tipo: "+tipo);
+            }
+            cant++;
+        }
+
+    }
 }
