@@ -48,6 +48,10 @@ public class Main {
             IO.println("1. Cantidad de lineas: " + cantidadLineas(stringHtml));
             IO.println("2. Cantidad de parrafos: " + cantidadParrafos(document));
             IO.println("3. Cantidad de imagenes dentro de los parrafos: " + cantidadImagenesParrafos(document));
+            IO.println("4. Cantidad de formularios: ");
+            IO.println("GET: "+ cantidadFormulariosGET(document));
+            IO.println("POST "+ cantidadFormulariosPOST(document));
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -84,6 +88,40 @@ public class Main {
     public static int cantidadImagenesParrafos(Document doc)
     {
         return doc.select("p img").size();
+    }
+
+    public static int cantidadFormulariosGET(Document doc)
+    {
+        Elements formularios = doc.select("form");
+
+        int get = 0;
+
+        for (Element form : formularios)
+        {
+            String metodo = form.attr("method").toUpperCase();
+
+            if(metodo.isEmpty() || metodo.equals("GET")) {
+                get++;
+            }
+        }
+        return get;
+    }
+
+    public static int cantidadFormulariosPOST(Document doc)
+    {
+        Elements formularios = doc.select("form");
+
+        int post = 0;
+
+        for (Element form : formularios)
+        {
+            String metodo = form.attr("method").toUpperCase();
+
+            if(metodo.equals("POST")) {
+                post++;
+            }
+        }
+        return post;
     }
 
 }
