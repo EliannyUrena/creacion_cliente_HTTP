@@ -5,6 +5,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -44,15 +45,19 @@ public class Main {
             String html = response.body();
             Document document = Jsoup.parse(response.body());
             String stringHtml = document.toString();
+            Elements formularios = document.select("form");
 
             IO.println("1. Cantidad de lineas: " + cantidadLineas(stringHtml));
             IO.println("2. Cantidad de parrafos: " + cantidadParrafos(document));
             IO.println("3. Cantidad de imagenes dentro de los parrafos: " + cantidadImagenesParrafos(document));
             IO.println("4. Cantidad de formularios: ");
-            IO.println("GET: "+ cantidadFormulariosGET(document));
-            IO.println("POST "+ cantidadFormulariosPOST(document));
+            IO.println("GET: "+ cantidadFormulariosGET(formularios));
+            IO.println("POST "+ cantidadFormulariosPOST(formularios));
             IO.println("\n5. Inputs para cada formulario: ");
-            mostrarInputs(document);
+            mostrarInputs(formularios);
+            IO.println("6. Enviar formularios POST: ");
+            enviarFormulariosPOST(formularios, client);
+
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -92,9 +97,9 @@ public class Main {
         return doc.select("p img").size();
     }
 
-    public static int cantidadFormulariosGET(Document doc)
+    public static int cantidadFormulariosGET(Elements formularios)
     {
-        Elements formularios = doc.select("form");
+        //Elements formularios = doc.select("form");
 
         int get = 0;
 
@@ -109,9 +114,9 @@ public class Main {
         return get;
     }
 
-    public static int cantidadFormulariosPOST(Document doc)
+    public static int cantidadFormulariosPOST(Elements formularios)
     {
-        Elements formularios = doc.select("form");
+        //Elements formularios = doc.select("form");
 
         int post = 0;
 
@@ -126,9 +131,9 @@ public class Main {
         return post;
     }
 
-    public static void mostrarInputs(Document doc)
+    public static void mostrarInputs(Elements formularios)
     {
-        Elements formularios = doc.select("form");
+        //Elements formularios = doc.select("form");
 
         int cant = 1;
 
@@ -146,11 +151,37 @@ public class Main {
                 if (tipo.isEmpty()) {
                     tipo = "text";
                 }
-                IO.println("Input: "+nombre);
-                IO.println("Tipo: "+tipo);
+                IO.println("Input: "+nombre + " - Tipo: " +tipo);
+                //IO.println("Tipo: "+tipo);
             }
             cant++;
         }
+    }
 
+    public static void enviarFormulariosPOST(Elements formularios, HttpClient client) {
+
+        String metodo;
+        String action;
+
+        for (Element form : formularios)
+        {
+            try {
+                metodo = form.attr("method").toUpperCase();
+                action = form.attr("action");
+
+                if (metodo.equals("POST") && !action.isEmpty())
+                {
+                    IO.println("ACTION: " + action);
+
+                    HttpRequest request = HttpRequest.newBuilder().uri(URI.create(action)).header("matricula", "10156927").POST(HttpRequest.BodyPublishers.ofString("asignatura=practica1")).build();
+
+                    HttpResponse<String> response  = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                    IO.println("Respuesta: " + response.body());
+                }
+            } catch (Exception e) {
+                IO.println("Error " + e.getMessage());
+            }
+        }
     }
 }
