@@ -47,7 +47,7 @@ public class Main {
 
             IO.println("1. Cantidad de lineas: " + cantidadLineas(stringHtml));
             IO.println("2. Cantidad de parrafos: " + cantidadParrafos(document));
-
+            IO.println("3. Cantidad de imagenes dentro de los parrafos: " + cantidadImagenesParrafos(document));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -79,6 +79,11 @@ public class Main {
     public static int cantidadParrafos(Document doc)
     {
         return doc.select("p").size();
+    }
+
+    public static int cantidadImagenesParrafos(Document doc)
+    {
+        return doc.select("p img").size();
     }
 
 }
