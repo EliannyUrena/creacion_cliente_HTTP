@@ -5,7 +5,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -55,15 +54,13 @@ public class Main {
             IO.println("POST "+ cantidadFormulariosPOST(formularios));
             IO.println("\n5. Inputs para cada formulario: ");
             mostrarInputs(formularios);
-            IO.println("6. Enviar formularios POST: ");
+            IO.println("\n6. Enviar formularios POST: ");
             enviarFormulariosPOST(formularios, client);
 
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     public static boolean esURLvalida(String url) {
@@ -99,8 +96,6 @@ public class Main {
 
     public static int cantidadFormulariosGET(Elements formularios)
     {
-        //Elements formularios = doc.select("form");
-
         int get = 0;
 
         for (Element form : formularios)
@@ -116,8 +111,6 @@ public class Main {
 
     public static int cantidadFormulariosPOST(Elements formularios)
     {
-        //Elements formularios = doc.select("form");
-
         int post = 0;
 
         for (Element form : formularios)
@@ -133,8 +126,6 @@ public class Main {
 
     public static void mostrarInputs(Elements formularios)
     {
-        //Elements formularios = doc.select("form");
-
         int cant = 1;
 
         for (Element form : formularios)
