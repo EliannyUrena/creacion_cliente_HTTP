@@ -44,11 +44,14 @@ public class Main {
             String html = response.body();
             Document document = Jsoup.parse(response.body());
             String stringHtml = document.toString();
+
+            Elements parrafos = document.select("p");
+            Elements imgParrafos = document.select("p img");
             Elements formularios = document.select("form");
 
             IO.println("1. Cantidad de lineas: " + cantidadLineas(stringHtml));
-            IO.println("2. Cantidad de parrafos: " + cantidadParrafos(document));
-            IO.println("3. Cantidad de imagenes dentro de los parrafos: " + cantidadImagenesParrafos(document));
+            IO.println("2. Cantidad de parrafos: " + parrafos.size());
+            IO.println("3. Cantidad de imagenes dentro de los parrafos: " + imgParrafos.size());
             IO.println("4. Cantidad de formularios: ");
             IO.println("GET: "+ cantidadFormulariosGET(formularios));
             IO.println("POST "+ cantidadFormulariosPOST(formularios));
@@ -56,7 +59,6 @@ public class Main {
             mostrarInputs(formularios);
             IO.println("\n6. Enviar formularios POST: ");
             enviarFormulariosPOST(formularios, client);
-
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -82,16 +84,6 @@ public class Main {
     public static int cantidadLineas(String html)
     {
         return html.split("\n").length;
-    }
-
-    public static int cantidadParrafos(Document doc)
-    {
-        return doc.select("p").size();
-    }
-
-    public static int cantidadImagenesParrafos(Document doc)
-    {
-        return doc.select("p img").size();
     }
 
     public static int cantidadFormulariosGET(Elements formularios)
@@ -143,7 +135,6 @@ public class Main {
                     tipo = "text";
                 }
                 IO.println("Input: "+nombre + " - Tipo: " +tipo);
-                //IO.println("Tipo: "+tipo);
             }
             cant++;
         }
